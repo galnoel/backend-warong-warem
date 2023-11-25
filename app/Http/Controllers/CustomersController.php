@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\customers;
 use App\Http\Requests\StorecustomersRequest;
 use App\Http\Requests\UpdatecustomersRequest;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 
 class CustomersController extends Controller
 {
@@ -62,5 +64,15 @@ class CustomersController extends Controller
     public function destroy(customers $customers)
     {
         //
+    }
+
+    function register(Request $req){
+        $customers=new customers;
+        $customers->name = $req->input("name");
+        $customers->email = $req->input("email");
+        $customers->password = Hash::make ($req->input("password"));
+        $customers->save();
+
+        return $customers;
     }
 }
