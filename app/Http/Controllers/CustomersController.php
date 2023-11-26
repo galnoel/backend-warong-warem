@@ -75,4 +75,13 @@ class CustomersController extends Controller
 
         return $customers;
     }
+
+    function login(Request $req){
+        $customers=customers::where("email", $req->email)->first();
+        if(!$customers || !Hash::check($req->password, $customers->password)){
+            return ["Error"=> "Email or password not matched"];
+        }
+
+        return $customers;
+    }
 }
