@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class tables extends Model
 {
     use HasFactory;
+    protected $attributes = [
+        'is_active' => 0,
+    ];
 }
