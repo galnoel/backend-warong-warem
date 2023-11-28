@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomersController;
+use App\Http\Controllers\ReservationsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,3 +23,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('register', [CustomersController::class, 'register']);
 Route::post('login', [CustomersController::class, 'login']);
+Route::post('createReservation', [ReservationsController::class, 'createReservation']);
