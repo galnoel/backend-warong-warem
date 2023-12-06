@@ -82,4 +82,39 @@ class ReservationsController extends Controller
 
 
     }
+
+    public function display(){
+        $data = reservations::select('customer_id', 'date', 'time', 'status')->get();
+
+        return $data;
+        }
+    
+    public function updateStatus(Request $request, $id)
+        {
+            $reservation = Reservations::find($id);
+            //$reservation->waiter_id = Auth::id(); // assuming the waiter is currently authenticated
+            $reservation->status = $request->status; // new status ('approved' or 'rejected')
+            $reservation->save();
+        
+            return $reservation;
+        }
+    
+    public function updateNotes(Request $request, $id)
+        {
+            $reservation = Reservations::find($id);
+            //$reservation->waiter_id = Auth::id(); // assuming the waiter is currently authenticated
+            $reservation->notes = $request->notes; // new status ('approved' or 'rejected')
+            $reservation->save();
+        
+            return $reservation;
+        }
+    public function updateTable(Request $request, $id)
+        {
+            $reservation = Reservations::find($id);
+            //$reservation->waiter_id = Auth::id(); // assuming the waiter is currently authenticated
+            $reservation->table_id = $request->table_id; // new status ('approved' or 'rejected')
+            $reservation->save();
+        
+            return $reservation;
+        }
 }

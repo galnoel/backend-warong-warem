@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\ReservationsController;
+use App\Http\Controllers\TablesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,3 +25,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('register', [CustomersController::class, 'register']);
 Route::post('login', [CustomersController::class, 'login']);
 Route::post('createReservation', [ReservationsController::class, 'createReservation']);
+Route::get('display', [ReservationsController::class, 'display']);
+Route::put('status/{id}', [ReservationsController::class, 'updateStatus']);
+Route::put('notes/{id}', [ReservationsController::class, 'updateNotes']);
+Route::put('reservation-table/{id}', [ReservationsController::class, 'updateTable']);
+Route::post('registerTable', [TablesController::class, 'registerTable']);
