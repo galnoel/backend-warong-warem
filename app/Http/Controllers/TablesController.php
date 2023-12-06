@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\tables;
 use App\Http\Requests\StoretablesRequest;
 use App\Http\Requests\UpdatetablesRequest;
+use Illuminate\Http\Request;
 
 class TablesController extends Controller
 {
@@ -62,5 +63,14 @@ class TablesController extends Controller
     public function destroy(tables $tables)
     {
         //
+    }
+
+    function registerTable(Request $req){
+        $tables=new tables;
+        $tables->type = $req->input("type");
+        $tables->capacity = $req->input("capacity");
+        $tables->save();
+
+        return $tables;
     }
 }
