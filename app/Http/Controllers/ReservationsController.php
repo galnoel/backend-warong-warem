@@ -32,6 +32,9 @@ class ReservationsController extends Controller
     public function store(StorereservationsRequest $request)
     {
         //
+        reservations::create($request->validated());
+
+        return $request;
     }
 
     /**
@@ -83,8 +86,9 @@ class ReservationsController extends Controller
 
     }
 
-    public function display(){
-        $data = reservations::select('customer_id', 'date', 'time', 'status')->get();
+    public function display_customer($id){
+        $data = Reservations::find($id);
+        $data = reservations::select('customer_id', 'date', 'time', 'status', 'created_at')->get();
 
         return $data;
         }
@@ -117,4 +121,16 @@ class ReservationsController extends Controller
         
             return $reservation;
         }
+
+        public function reschedule(Request $request, $id)
+        {
+            $reservation = Reservations::find($id);
+            //$reservation->waiter_id = Auth::id(); // assuming the waiter is currently authenticated
+            $reservation->date = $request->date;
+            $reservation->time = $request->time;
+            $reservation->save();
+        
+            return $reservation;
+        }
+        
 }
