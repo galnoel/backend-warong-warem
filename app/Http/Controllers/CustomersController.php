@@ -67,13 +67,21 @@ class CustomersController extends Controller
     }
 
     function register(Request $req){
-        $customers=new customers;
+       /* $customers=new customers;
         $customers->name = $req->input("name");
         $customers->email = $req->input("email");
         $customers->password = Hash::make ($req->input("password"));
-        $customers->save();
+        $customers->save();*/
+        $validatedData = $req -> validate([
+            "name"=> 'required',
+            'email'=> 'required|email:dns|unique:customers',
+            'password'=> 'required|min:8'
+        ]);
+        $validatedData['password'] = Hash::make($validatedData['password']);
+        customers::create($validatedData);
 
-        return $customers;
+//        return $customers;
+        return response()->json(['message' => 'User signed up successfully', 'user' => $validatedData]);
     }
 
     function login(Request $req){
@@ -81,7 +89,6 @@ class CustomersController extends Controller
         if(!$customers || !Hash::check($req->password, $customers->password)){
             return ["Error"=> "Email or password not matched"];
         }
-
         return $customers;
     }
 }
