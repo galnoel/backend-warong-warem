@@ -43,3 +43,7 @@ Route::put('reschedule/{id}', [ReservationsController::class, 'reschedule']);
 
 
 Route::post('registerTable', [TablesController::class, 'registerTable']);
+Route::post('createReservation', [ReservationsController::class, 'createReservation']);
+Route::post('changeCapacity', [TablesController::class, 'changeCapacity']);
+Route::post('changeTableStatus', [TablesController::class,'changeTableStatus']);
+Route::get('changeCapacity', [TablesController::class,'changeCapacity']);
