@@ -24,11 +24,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('register', [UsersController::class, 'register']);
+Route::post('testLogin', [UsersController::class, 'testLogin']);
+Route::post('/login', [UsersController::class, 'login']);
+Route::middleware('auth:sanctum')->get('/user', [UsersController::class, 'userRole']);
+// Other protected routes for different roles handled within UserController
+
 
 Route::post('registercustomer', [CustomersController::class, 'register']);
-Route::post('login', [CustomersController::class, 'login']);
+//Route::post('login', [CustomersController::class, 'login']);
 
-Route::post('createReservation', [ReservationsController::class, 'createReservation']);
+Route::middleware('auth:sanctum')->post('createReservation', [ReservationsController::class, 'createReservation']);
 Route::post('store', [ReservationsController::class,'store']);
 Route::get('display-customer/{id}', [ReservationsController::class, 'display_customer']);
 Route::put('status/{id}', [ReservationsController::class, 'updateStatus']);
