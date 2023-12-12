@@ -66,60 +66,22 @@ class TablesController extends Controller
         //
     }
     
-    public function changeCapacity(Request $request)
-    {
-        // Validate the request
-        $validator = Validator::make($request->all(), [
-            'table_name' => 'required|string',
-            'new_capacity' => 'required|integer',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors(),
-            ], 422);
+    public function updateStatus(Request $request, $id)
+        {
+            $tables = Tables::find($id);
+            //$reservation->waiter_id = Auth::id(); // assuming the waiter is currently authenticated
+            $tables->is_active = $request->is_active; // new status ('approved' or 'rejected')
+            $tables->save();
+        
+            return $tables;
         }
-
-        // Get the table
-        $table = \App\Models\Tables::where('name', $request->get('tables'))->firstOrFail();
-
-        // Update the capacity
-        $table->capacity = $request->get('new_capacity');
-        $table->save();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Kapasitas tabel berhasil diubah',
-        ], 200);
-    }
   
-    public function changeTableStatus(Request $request)
-    {
-        // Validate the request
-        $validator = Validator::make($request->all(), [
-            'table_id' => 'required|integer',
-            'status' => 'required|in:booked,empty',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors(),
-            ], 422);
+        public function updateCapacity(Request $request, $id)
+        {
+            $tables = Tables::find($id);
+            $tables->capacity = $request->capacity; 
+            $tables->save();
+        
+            return $tables;
         }
-
-        // Get the table
-        $table = \App\Models\Tables::findOrfail($request->get('table_id'));
-
-        // Update the status
-        $table->status = $request->get('status');
-        $table->save();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Status tabel berhasil diubah',
-            'data' => $table,
-        ], 200);
     }
-}

@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\ReservationsController;
-use App\Http\Controllers\TablesController;
+use App\Http\Controllers\TablesController;        
 use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +45,5 @@ Route::get('reservation-list', [ReservationsController::class, 'index']);
 
 Route::post('registerTable', [TablesController::class, 'registerTable']);
 Route::post('createReservation', [ReservationsController::class, 'createReservation']);
-Route::post('changeCapacity', [TablesController::class, 'changeCapacity']);
-Route::post('changeTableStatus', [TablesController::class,'changeTableStatus']);
-Route::get('changeCapacity', [TablesController::class,'changeCapacity']);
+Route::put('tableStatus/{id}', [TablesController::class, 'updateStatus']);
+Route::put('tableCapacity/{id}', [TablesController::class, 'updateCapacity']);
