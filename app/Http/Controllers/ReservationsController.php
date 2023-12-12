@@ -68,7 +68,7 @@ class ReservationsController extends Controller
     {
         //
     }
-    function createReservation(Request $req){
+    /*function createReservation(Request $req){
         //$customerId = Auth::id();
         //$customer_id = auth()->user()->customer_id;
 
@@ -84,6 +84,19 @@ class ReservationsController extends Controller
         return $reservation;
 
 
+    }*/
+    public function createReservation(Request $request)
+    {
+        $validatedData = $request->validate([
+            'customer_id'=> 'required',
+            'number_of_people'=>'required',
+            'type'=> 'required|string|in:reguler,vip,outdoor,VIP',
+            'date'=> 'required|date|after_or_equal:today',
+            'time'=> 'required'
+        ]);
+        $validatedData['customer_id'] = auth()->user()->id;
+        reservations::create($validatedData);
+        return $validatedData;
     }
 
     public function display_customer($id){
