@@ -7,6 +7,7 @@ use App\Http\Requests\StorereservationsRequest;
 use App\Http\Requests\UpdatereservationsRequest;
 use Illumnate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReservationsController extends Controller
 {
@@ -16,6 +17,13 @@ class ReservationsController extends Controller
     public function index()
     {
         //
+        $reservations = DB::table('reservations')
+        ->select('users.name', 'users.email', 'users.id','reservations.*')
+        ->join('users', 'reservations.customer_id', '=', 'users.id')
+        //->groupBy('reservations.id')
+        ->get();
+
+        return response()->json($reservations);
     }
 
     /**
@@ -68,7 +76,7 @@ class ReservationsController extends Controller
     {
         //
     }
-    function createReservation(Request $req){
+    /*function createReservation(Request $req){
         //$customerId = Auth::id();
         //$customer_id = auth()->user()->customer_id;
 
@@ -84,6 +92,18 @@ class ReservationsController extends Controller
         return $reservation;
 
 
+    }*/
+    public function createReservation(Request $request)
+    {
+        $validatedData = $request->validate([
+            'number_of_people'=>'required',
+            'type'=> 'required |string|in:regular,vip,outdoor,VIP,Regular,Outdoor,Full ',
+            'date'=> 'required|date|after_or_equal:today',
+            'time'=> 'required'
+        ]);
+        $validatedData['customer_id'] = auth()->user()->id;
+        $reservations = reservations::create($validatedData);
+        return $reservations;
     }
 
     public function display_customer($id){
