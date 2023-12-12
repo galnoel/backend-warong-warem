@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->get('/user', [UsersController::class, 'userRo
 Route::post('registercustomer', [CustomersController::class, 'register']);
 //Route::post('login', [CustomersController::class, 'login']);
 
-Route::middleware('auth:sanctum')->post('createReservation', [ReservationsController::class, 'createReservation']);
+Route::post('createReservation', [ReservationsController::class, 'createReservation']);
 Route::post('store', [ReservationsController::class,'store']);
 Route::get('display-customer/{id}', [ReservationsController::class, 'display_customer']);
 Route::put('status/{id}', [ReservationsController::class, 'updateStatus']);

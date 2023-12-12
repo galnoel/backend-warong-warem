@@ -19,7 +19,7 @@ class StorereservationsRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    /*public function rules(): array
     {
         return [
             //
@@ -29,5 +29,5 @@ class StorereservationsRequest extends FormRequest
             'date'=> 'required|date|after_or_equal:today',
             'time'=> 'required',
         ];
-    }
+    }*/
 }
