@@ -7,6 +7,7 @@ use App\Http\Requests\StorereservationsRequest;
 use App\Http\Requests\UpdatereservationsRequest;
 use Illumnate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReservationsController extends Controller
 {
@@ -16,6 +17,13 @@ class ReservationsController extends Controller
     public function index()
     {
         //
+        $reservations = DB::table('reservations')
+        ->select('users.name', 'users.email', 'users.id','reservations.*')
+        ->join('users', 'reservations.customer_id', '=', 'users.id')
+        //->groupBy('reservations.id')
+        ->get();
+
+        return response()->json($reservations);
     }
 
     /**
@@ -90,7 +98,7 @@ class ReservationsController extends Controller
         $validatedData = $request->validate([
             'customer_id'=> 'required',
             'number_of_people'=>'required',
-            'type'=> 'required|string|in:reguler,vip,outdoor,VIP',
+            'type'=> 'required |string|in:regular,vip,outdoor,VIP,Regular,Outdoor,Full ',
             'date'=> 'required|date|after_or_equal:today',
             'time'=> 'required'
         ]);

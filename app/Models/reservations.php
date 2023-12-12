@@ -12,4 +12,9 @@ class reservations extends Model
         'status' => 'waiting for confirmation',
     ];
     protected $guarded = [];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
