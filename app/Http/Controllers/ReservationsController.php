@@ -96,15 +96,14 @@ class ReservationsController extends Controller
     public function createReservation(Request $request)
     {
         $validatedData = $request->validate([
-            'customer_id'=> 'required',
             'number_of_people'=>'required',
             'type'=> 'required |string|in:regular,vip,outdoor,VIP,Regular,Outdoor,Full ',
             'date'=> 'required|date|after_or_equal:today',
             'time'=> 'required'
         ]);
         $validatedData['customer_id'] = auth()->user()->id;
-        reservations::create($validatedData);
-        return $validatedData;
+        $reservations = reservations::create($validatedData);
+        return $reservations;
     }
 
     public function display_customer($id){
