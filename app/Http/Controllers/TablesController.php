@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\tables;
 use App\Http\Requests\StoretablesRequest;
 use App\Http\Requests\UpdatetablesRequest;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class TablesController extends Controller
@@ -64,47 +65,61 @@ class TablesController extends Controller
     {
         //
     }
-    function registerTable(Request $req){
-        $tables=new tables;
-        $tables->type = $req->input("type");
-        $tables->capacity = $req->input("capacity");
-        $tables->save();
-
-        return $tables;
-    }
-
-    function tableStatusForWaiters() {
-        $tables = tables::all();
-        $tableStatusForWaiters = [];
-        foreach ($tables as $table) {
-            if ($table->status === 'pending') {
-                $waiter = $table->waiter;
-            if ($waiter){
-                $tableStatusForWaiters[$waiter->id][] = [
-                    'table_type' => $table->table_type, 
-                    'status' => $table->status,
-                    'customer_name' => $table->customer_name, 
-                    'update_button' => true, 
-                ];
-            }  
-        }
-    }
-
-        return $tableStatusForWaiters;
-}
     
-    function updateTableStatus($request, tables $tables) {
-        $tableType = $request->input('table_type');
-        $updatedStatus = $request->input('status'); 
+    public function changeCapacity(Request $request)
+    {
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'table_name' => 'required|string',
+            'new_capacity' => 'required|integer',
+        ]);
 
-        $table = tables::where('table_type', $tableType)->first();
-    
-        if ($table) {
-            if ($updatedStatus === 'confirm' || $updatedStatus === 'reject') {
-                $table->status = $updatedStatus;
-                $table->save();
-            } else {
-            }
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422);
         }
+
+        // Get the table
+        $table = \App\Models\Tables::where('name', $request->get('tables'))->firstOrFail();
+
+        // Update the capacity
+        $table->capacity = $request->get('new_capacity');
+        $table->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Kapasitas tabel berhasil diubah',
+        ], 200);
+    }
+  
+    public function changeTableStatus(Request $request)
+    {
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'table_id' => 'required|integer',
+            'status' => 'required|in:booked,empty',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        // Get the table
+        $table = \App\Models\Tables::findOrfail($request->get('table_id'));
+
+        // Update the status
+        $table->status = $request->get('status');
+        $table->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status tabel berhasil diubah',
+            'data' => $table,
+        ], 200);
     }
 }
