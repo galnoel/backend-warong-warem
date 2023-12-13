@@ -16,20 +16,16 @@
         /**
          * Display a listing of the resource.
          */
-        // public function index()
-        // {
-        //     // Get the authenticated user's ID from the JWT token
-        //     $userId = auth()->user()->id;
+        public function index()
+        {
+            $reservations = DB::table('reservations')
+                ->select('users.name', 'users.email', 'users.id', 'reservations.*')
+                ->join('users', 'reservations.customer_id', '=', 'users.id')
+                 // Filter reservations by user ID
+                ->get();
 
-        //     // Fetch reservations for the authenticated user only
-        //     $reservations = DB::table('reservations')
-        //         ->select('users.name', 'users.email', 'users.id', 'reservations.*')
-        //         ->join('users', 'reservations.customer_id', '=', 'users.id')
-        //         ->where('users.id', $userId) // Filter reservations by user ID
-        //         ->get();
-
-        //     return response()->json($reservations);
-        // }
+            return response()->json($reservations);
+        }
         public function getUserReservations(Request $request)
         {
             $user = null;
