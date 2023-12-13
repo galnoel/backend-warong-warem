@@ -104,4 +104,15 @@ class UsersController extends Controller
 
         return response()->json(['role' => $role]);
     }
+
+    public function logout(Request $request)
+{
+    try {
+        JWTAuth::invalidate($request->token);
+        return response()->json(['message' => 'Successfully logged out']);
+    } catch (JWTException $exception) {
+        return response()->json(['error' => 'Failed to logout'], 500);
+    }
+}
+
 }
