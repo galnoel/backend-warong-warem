@@ -43,7 +43,7 @@ Route::put('status/{id}', [ReservationsController::class, 'updateStatus']);
 Route::put('notes/{id}', [ReservationsController::class, 'updateNotes']);
 Route::put('reservation-table/{id}', [ReservationsController::class, 'updateTable']);
 Route::put('reschedule/{id}', [ReservationsController::class, 'reschedule']);
-Route::get('reservation-list', [ReservationsController::class, 'index']);
+Route::get('reservation-list', [ReservationsController::class, 'getUserReservations']);
 
 
 Route::post('registerTable', [TablesController::class, 'registerTable']);
