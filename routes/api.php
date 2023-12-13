@@ -27,6 +27,8 @@ Route::post('register', [UsersController::class, 'register']);
 Route::post('testLogin', [UsersController::class, 'testLogin']);
 Route::post('/login', [UsersController::class, 'login']);
 Route::middleware('auth:sanctum')->get('/user', [UsersController::class, 'userRole']);
+Route::middleware('jwt.auth')->get('/user', [UsersController::class, 'userRole']);
+Route::middleware('jwt.auth')->post('/logout', [UsersController::class, 'logout']);
 // Other protected routes for different roles handled within UserController
 
 
