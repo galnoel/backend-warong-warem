@@ -95,8 +95,14 @@ class UsersController extends Controller
     if (!$token = JWTAuth::attempt($credentials)) {
         return response()->json(['error' => 'Unauthorized'], 401);
     }
+    // Fetch the user based on the provided email
+    $user = User::where('email', $request->email)->first();
 
-    return response()->json(['token' => $token]);
+    // Assuming 'role' is a field in your users table
+    $role = $user->role;
+
+    // Return token and role in the response
+    return response()->json(['token' => $token, 'role' => $role]);
 }
 
     public function userRole(Request $request) {
