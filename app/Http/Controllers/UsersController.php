@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Auth;
+use JWTAuth;
 
 
 class UsersController extends Controller
@@ -72,18 +74,30 @@ class UsersController extends Controller
 
         return $users;
     }*/
-    public function login(Request $request) {
-        $credentials = $request->only('email', 'password');
+    // public function login(LoginRequest $request) {
+    //     $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('authToken')->plainTextToken;
+    //     if (Auth::attempt($credentials)) {
+    //         $user = Auth::user();
+    //         $token = $user->createToken('authToken')->plainTextToken;
+    //         //$token = $user->createToken('main')->plainTextToken;
 
-            return response()->json(['token' => $token], 200);
-        }
 
-        return response()->json(['message' => 'Unauthorized'], 401);
+    //         return response()->json(['token' => $token], 200);
+    //     }
+
+    //     return response()->json(['message' => 'Unauthorized'], 401);
+    // }
+    public function login(LoginRequest $request)
+{
+    $credentials = $request->only('email', 'password');
+
+    if (!$token = JWTAuth::attempt($credentials)) {
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
+
+    return response()->json(['token' => $token]);
+}
 
     public function userRole(Request $request) {
         $role = $request->user()->role; // Access the role directly from the user model

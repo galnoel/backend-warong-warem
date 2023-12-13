@@ -11,7 +11,7 @@ class reservations extends Model
     protected $attributes = [
         'status' => 'waiting for confirmation',
     ];
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function user()
     {
