@@ -16,17 +16,50 @@
         /**
          * Display a listing of the resource.
          */
-        public function index()
-        {
-            //
-            $reservations = DB::table('reservations')
-            ->select('users.name', 'users.email', 'users.id','reservations.*')
-            ->join('users', 'reservations.customer_id', '=', 'users.id')
-            //->groupBy('reservations.id')
-            ->get();
+        // public function index()
+        // {
+        //     // Get the authenticated user's ID from the JWT token
+        //     $userId = auth()->user()->id;
 
-            return response()->json($reservations);
+        //     // Fetch reservations for the authenticated user only
+        //     $reservations = DB::table('reservations')
+        //         ->select('users.name', 'users.email', 'users.id', 'reservations.*')
+        //         ->join('users', 'reservations.customer_id', '=', 'users.id')
+        //         ->where('users.id', $userId) // Filter reservations by user ID
+        //         ->get();
+
+        //     return response()->json($reservations);
+        // }
+        public function getUserReservations(Request $request)
+        {
+            $user = null;
+
+            // Check for JWT token in the request headers
+            if ($token = $request->header('Authorization')) {
+                $token = str_replace('Bearer ', '', $token);
+
+                // Attempt to authenticate the user using the JWT token
+                try {
+                    $user = JWTAuth::parseToken()->authenticate();
+                } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+                    // Handle JWT exceptions here (e.g., token expired, invalid token)
+                    return response()->json(['error' => 'Invalid token'], 401);
+                }
+            }
+
+            if ($user) {
+                // Fetch reservations for the authenticated user only
+                $reservations = Reservations::where('customer_id', $user->id)->get();
+                
+                return response()->json($reservations);
+            } else {
+                // Handle the case where no user is authenticated
+                return response()->json(['error' => 'Unauthenticated'], 401);
+            }
         }
+
+
+
 
         /**
          * Show the form for creating a new resource.
