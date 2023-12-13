@@ -19,9 +19,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::post('register', [UsersController::class, 'register']);
 Route::post('testLogin', [UsersController::class, 'testLogin']);
@@ -33,7 +33,8 @@ Route::middleware('auth:sanctum')->get('/user', [UsersController::class, 'userRo
 Route::post('registercustomer', [CustomersController::class, 'register']);
 //Route::post('login', [CustomersController::class, 'login']);
 
-Route::post('createReservation', [ReservationsController::class, 'createReservation']);
+Route::post('createReservation', [ReservationsController::class, 'createReservation'])->middleware('auth');
+Route::post('createDummyReservation', [ReservationsController::class, 'createDummyReservation']);
 Route::post('store', [ReservationsController::class,'store']);
 Route::get('display-customer/{id}', [ReservationsController::class, 'display_customer']);
 Route::put('status/{id}', [ReservationsController::class, 'updateStatus']);

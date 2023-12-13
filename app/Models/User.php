@@ -10,8 +10,9 @@ use Illuminate\Foundation\Bootstrap\BootProviders;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements JWTSubject // Implement the JWTSubject interface
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -45,5 +46,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function reservations()
     {
         return $this->hasMany(Reservations::class);
+    }
+    public function getJWTIdentifier()
+    {
+        return $this->getKey(); // Return the primary key of the user
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return []; // You can add custom claims here if needed
     }
 }

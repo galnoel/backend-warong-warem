@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('customer_id')
                 ->nullable()
                 ->constrained(
-                    table: 'customers',
-                    indexName: 'reservation_customer_id'
+                    table: 'users',
+                    indexName: 'reservation_user_id'
                 )
                 ->onUpdate('cascade')
                 ->onDelete('set null');
