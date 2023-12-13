@@ -9,7 +9,7 @@ class reservations extends Model
 {
     use HasFactory;
     protected $attributes = [
-        'status' => 'waiting for confirmation',
+        'status' => 'waiting',
     ];
     protected $guarded = ['id'];
 

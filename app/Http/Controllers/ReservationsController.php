@@ -44,8 +44,10 @@
             }
 
             if ($user) {
-                // Fetch reservations for the authenticated user only
-                $reservations = Reservations::where('customer_id', $user->id)->get();
+                // Fetch reservations with status 'waiting' for the authenticated user only
+                $reservations = Reservations::where('customer_id', $user->id)
+                    ->where('status', 'waiting')
+                    ->get();
                 
                 return response()->json($reservations);
             } else {
